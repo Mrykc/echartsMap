@@ -3,11 +3,13 @@
 </template>
 <script>
 import allCode from "@/static/maps/allCode";
+import {MessageBox, Message} from 'element-ui'
 export default {
   name: "Echarts",
   data() {
     return {
       myChart: null,
+      isHaveNext:true
     };
   },
   /**
@@ -64,9 +66,10 @@ export default {
         this.registerMap().then(() => {
           this.myChart.setOption(this.option);
           this.myChart.on("click", (params) => {
-            this.$emit("click", params.name);
+            this.$emit("click", {name:params.name,isHaveNext:this.isHaveNext});
           });
           this.myChart.on("contextmenu", (params) => {
+            this.isHaveNext=true
             this.$emit("contextmenu", params);
           });
           window.addEventListener("resize", this.resizeChart);
@@ -78,11 +81,10 @@ export default {
       this.registerTheme().then(() => {
         this.registerMap().then(() => {
           this.myChart.setOption(this.option);
-          window.addEventListener("resize", this.resizeChart);
         });
       });
     },
-    //接口数据
+    //主题
     async registerTheme() {
       if (this.theme) {
         await this.$axios
@@ -100,16 +102,18 @@ export default {
     //地图JSON注册
     async registerMap() {
       let city=allCode[`${this.nameMap}`]
-      if (this.nameMap) {
+      if (this.nameMap&&city) {
         await this.$axios
-          .get(`${window.config.map}/${city}_full.json`)
+          .get(`${city}_full.json`,{loading: true})
           .then(res => {
             this.$echarts.registerMap(this.nameMap, res);
-          }).catch( error=>{
-            console.log(error)
-            });
-        //获取本地json文件
-        // this.$echarts.registerMap('china', china)
+          })
+      }else{
+          Message({
+            message: `暂无${this.nameMap}数据`,
+            type: 'error',
+            duration: 3 * 1000
+          })
       }
       return;
     },

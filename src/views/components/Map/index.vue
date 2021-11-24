@@ -6,16 +6,17 @@
 
 <script>
 
-import Echart from '../components/echarts/Echarts.vue'
+import Echart from '@/components/echarts/Echarts.vue'
+
 export default {
   components: {
     Echart
   },
   data() {
     return {
-      nameMap:'china',
+      nameMap: 'china',
       option: {},
-      cityParams:['china']
+      cityParams: []
     }
   },
   created() {
@@ -25,7 +26,7 @@ export default {
   },
   methods: {
     //获取地图数据
-    getMap(map) {
+    getMap(map, series) {
       this.option = {
         tooltip: {
           trigger: 'item',
@@ -48,11 +49,11 @@ export default {
             fontSize: 12,
             normal: {
               show: false,
-              color:'#ffffff'
+              color: '#ffffff'
             },
             emphasis: {
               show: false,
-              color:'yellow'
+              color: 'yellow'
             }
           },
           itemStyle: {
@@ -70,25 +71,21 @@ export default {
           roam: false,
           aspectScale: 1,
         },
-        series: [
-
-        ],
+        series: series,
       }
     },
     //下钻
-    getNextMap(name) {
-      if(this.cityParams.length<3&&name!='台湾省'){
-        this.cityParams.push(name)
-        this.nameMap=name
-        this.getMap(name)
-      }
+    getNextMap(map) {
+      this.cityParams.push(map.name)
+      this.nameMap = map.name
+      this.getMap(map.name, [])
     },
-    backMap(){
-      if(this.cityParams.length>1){
-        this.getMap(this.cityParams.pop())
-      }else{
-        this.getMap('china')
-        console.log('到底了')
+    //返回
+    backMap() {
+      if (this.cityParams.pop()) {
+        this.getMap(this.cityParams.pop(), [])
+      } else {
+        this.getMap('china', [])
       }
     }
   }
@@ -96,7 +93,7 @@ export default {
 
 </script>
 <style lang="scss">
-.home{
+.home {
   width: 100%;
   height: 100%;
 }

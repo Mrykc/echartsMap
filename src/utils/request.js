@@ -1,17 +1,37 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
+import {MessageBox, Message, Loading} from 'element-ui'
 
-// axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
+const loading = {
+    loadingInstance: null, // Loading实例
+    open: function () { // 打开加载
+        if (this.loadingInstance === null) { // 创建单例, 防止切换路由重复加载
+            this.loadingInstance = Loading.service({
+                text: '拼命加载中',
+                target: '.main',
+                background: 'rgba(0, 0, 0, 0.5)' // 加载效果
+            })
+        }
+    },
+    close: function () { // 关闭加载
+        if (this.loadingInstance !== null) {
+            this.loadingInstance.close()
+        }
+        this.loadingInstance = null // 关闭后实例重新赋值null, 下次让它重新创建
+    }
+}
+
+axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 // 创建axios实例
 const service = {
     rest: axios.create({
-        baseURL: window.config.baseUrl,
+        baseURL: process.env.VUE_APP_BASE_API,
         timeout: 50000
     })
 }
 
 // rest拦截器
 service.rest.interceptors.request.use(config => {
+    console.log(config)
     config.headers['Authorization'] = 'Bearer 123';
     // get请求映射params参数
     if (config.method === 'get' && config.params) {
@@ -35,6 +55,9 @@ service.rest.interceptors.request.use(config => {
         config.params = {};
         config.url = url;
     }
+    if(!config.l){
+        loading.open()
+    }
     return config
 }, error => {
     Promise.reject(error)
@@ -43,8 +66,13 @@ service.rest.interceptors.request.use(config => {
 // rest响应拦截器
 service.rest.interceptors.response.use(res => {
         if (res.status === 200) {
+            loading.close()
             return res.data;
+        }else if(res.status === 404){
+            loading.close()
+            return
         } else {
+            loading.close()
             Message({
                 message: '系统接口异常',
                 type: 'error',
@@ -54,7 +82,8 @@ service.rest.interceptors.response.use(res => {
         }
     },
     error => {
-        let { message } = error;
+        loading.close()
+        let {message} = error;
         if (message == "Network Error") {
             Message({
                 message: "网络连接错误，请检查网络",

@@ -30,6 +30,11 @@ const routes = [
                         name: 'map',
                         component: () => import('@/views/components/Map')
                     },
+                    {
+                        path: '/cesium',
+                        name: 'cesium',
+                        component: () => import('@/views/components/Cesium')
+                    },
                 ]
             }
         ]

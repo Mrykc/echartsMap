@@ -1,3 +1,8 @@
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const webpack = require('webpack')
+const path = require('path')
+let cesiumSource = './node_modules/cesium/Source'
+let cesiumWorkers = '../Build/Cesium/Workers'
 module.exports = {
     /* 部署应用包的基本URL */
     /* baseUrl 从 Vue CLI 3.3 起已弃用 ，请使用publicPath */
@@ -26,9 +31,18 @@ module.exports = {
             alias: {
                 'assets': '@/assets',
                 'components': '@/components',
-                'views': '@/views',
+                'views': '@/views'
             }
-        }
+        },
+        plugins: [
+            new CopyWebpackPlugin([{ from: path.join(cesiumSource, cesiumWorkers), to: 'Workers' }]),
+            new CopyWebpackPlugin([{ from: path.join(cesiumSource, 'Assets'), to: 'Assets' }]),
+            new CopyWebpackPlugin([{ from: path.join(cesiumSource, 'Widgets'), to: 'Widgets' }]),
+            new CopyWebpackPlugin([{ from: path.join(cesiumSource, 'ThirdParty/Workers'), to: 'ThirdParty/Workers' }]),
+            new webpack.DefinePlugin({
+                CESIUM_BASE_URL: JSON.stringify('./')
+            })
+        ],
     },
     devServer: {
         port: 8866,
@@ -46,7 +60,15 @@ module.exports = {
                 headers: {
                     Referer: 'https://geo.datav.aliyun.com/areas_v3/bound/'
                 }
-            }
+            },
+            // "/LocalDemoApi": {
+            //     target: "http://localhost:8866", // 路径指向本地主机地址及端口号
+            //     ws: true,
+            //     changeOrigin: true,
+            //     pathRewrite: {
+            //         "^/LocalDemoApi": "/DemoData" // 路径转发代理
+            //     }
+            // },
         }
     }
 };

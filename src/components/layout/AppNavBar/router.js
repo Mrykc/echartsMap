@@ -14,6 +14,11 @@ const routes = [
                 path: '/map',
                 name: '地图',
                 icon:'el-icon-location'
+            },
+            {
+                path: '/cesium',
+                name: '3D地球',
+                icon:'el-icon-location'
             }
         ]
     }

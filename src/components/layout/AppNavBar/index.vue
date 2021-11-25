@@ -1,7 +1,8 @@
 <template>
   <div class="navbar">
     <el-menu
-        default-active="/Home"
+        :default-active="defaultActive"
+        ref="elMenu"
         class="el-menu-vertical-demo"
         background-color="#545c64"
         text-color="#ffffff"
@@ -45,11 +46,15 @@ export default {
   data() {
     return {
       isCollapse: false,
-      routes:routes
+      routes:routes,
+      defaultActive:'/home'
     };
   },
-  mounted() {
-
+  //监听路有变化改变选中状态
+  watch:{
+    $route(to,from){
+      this.defaultActive=to.path
+    }
   },
   methods: {
     handleOpen(key, keyPath) {

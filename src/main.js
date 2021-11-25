@@ -8,7 +8,8 @@ Vue.use(Fragment.Plugin)
 // 引入element组件库
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-
+//引入元素大小监控插件
+import elementLinster from 'element-resize-detector'
 Vue.use(ElementUI)
 //引入echarts
 import * as echarts from 'echarts'

@@ -1,15 +1,16 @@
 <template>
-  <div class="v-canvas"></div>
+  <div class="v-canvas" ref="vCanvas"></div>
 </template>
 <script>
 import allCode from "@/static/maps/allCode";
-import {MessageBox, Message} from 'element-ui'
+import {Message} from 'element-ui'
 export default {
   name: "Echarts",
   data() {
     return {
       myChart: null,
-      isHaveNext:true
+      isHaveNext:true,
+      erd:undefined
     };
   },
   /**
@@ -58,6 +59,16 @@ export default {
   },
   mounted() {
     this.init()
+    //导入监听插件
+    const elementResizeDetectorMaker = require("element-resize-detector");
+    // 创建实例
+    const that=this
+    that.erd = elementResizeDetectorMaker();
+    that.erd.listenTo(that.$el,()=>{
+      that.$nextTick(()=>{
+        this.resizeChart()
+      })
+    })
   },
   methods: {
     //初始化方法
@@ -72,7 +83,7 @@ export default {
             this.isHaveNext=true
             this.$emit("contextmenu", params);
           });
-          window.addEventListener("resize", this.resizeChart);
+         // window.addEventListener("resize", this.resizeChart)
         });
       });
     },
@@ -97,14 +108,13 @@ export default {
         this.myChart = this.$echarts.init(this.$el);
       }
       this.$emit("init", this.myChart);
-      return;
     },
     //地图JSON注册
     async registerMap() {
       let city=allCode[`${this.nameMap}`]
       if (this.nameMap&&city) {
         await this.$axios
-          .get(`${city}_full.json`,{loading: true})
+          .get(`${city}_full.json`,)
           .then(res => {
             this.$echarts.registerMap(this.nameMap, res);
           })
@@ -115,7 +125,6 @@ export default {
             duration: 3 * 1000
           })
       }
-      return;
     },
     //更新视图
     updateChart() {
@@ -129,7 +138,8 @@ export default {
     },
   },
   destroyed() {
-    window.removeEventListener("resize", this.resizeChart);
+    this.erd.removeAllListeners(this.$el)
+    // window.removeEventListener("resize", this.resizeChart);
   },
 };
 </script>

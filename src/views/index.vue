@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="overflow: hidden">
     <Header></Header>
     <NavBar :width="navWidth" @change="change"></NavBar>
     <Main :width="mainWidth"></Main>
@@ -21,7 +21,6 @@ export default {
   methods:{
     //更改main和nav宽度
     change(navWidth,mainWidth){
-      console.log(navWidth,mainWidth)
       this.navWidth=navWidth
       this.mainWidth=mainWidth
     }
@@ -49,6 +48,7 @@ export default {
   bottom: 0px;
   overflow-y: auto;
   background-color: #545c64;
+  overflow-x: hidden;
   &-conceal{
     width: 5%;
   }

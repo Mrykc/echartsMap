@@ -12,6 +12,7 @@
     "cesium": "^1.87.1",
     "core-js": "^3.6.5",
     "echarts": "^4.0.4",
+    "element-resize-detector": "^1.2.3",
     "element-ui": "^2.15.6",
     "vue": "^2.6.11",
     "vue-fragment": "^1.5.2",

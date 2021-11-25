@@ -1,17 +1,31 @@
 <template>
   <div>
     <Header></Header>
-    <NavBar></NavBar>
-    <Main></Main>
+    <NavBar :width="navWidth" @change="change"></NavBar>
+    <Main :width="mainWidth"></Main>
   </div>
 </template>
 
 <script>
-import Header from '@/components/layout/AppHeader'
-import NavBar from '@/components/layout/AppNavBar'
-import Main from '@/components/layout/AppMain'
+import Header from '@/views/layout/AppHeader'
+import NavBar from '@/views/layout/AppNavBar'
+import Main from '@/views/layout/AppMain'
 export default {
-  components:{Header,NavBar,Main}
+  components:{Header,NavBar,Main},
+  data(){
+    return{
+      navWidth:'12%',
+      mainWidth:'88%'
+    }
+  },
+  methods:{
+    //更改main和nav宽度
+    change(navWidth,mainWidth){
+      console.log(navWidth,mainWidth)
+      this.navWidth=navWidth
+      this.mainWidth=mainWidth
+    }
+  }
 }
 </script>
 
@@ -30,7 +44,6 @@ export default {
 /* 左侧导航栏 */
 .navbar {
   position: absolute;
-  width: 12%;
   top: 50px;
   left: 0px;
   bottom: 0px;
@@ -44,10 +57,8 @@ export default {
 /* 右侧主区域 */
 .main {
   position: absolute;
-  width: 88%;
   height: calc(100% - 50px);
   top: 50px;
-  left: 12%;
   right: 0px;
   bottom: 0px;
   overflow-y: auto;

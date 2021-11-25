@@ -2,7 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-
+//引入Fragment，主要解决菜单栏缩放文字不隐藏问题
+import Fragment from 'vue-fragment'
+Vue.use(Fragment.Plugin)
 // 引入element组件库
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';

@@ -31,7 +31,6 @@ const service = {
 
 // rest拦截器
 service.rest.interceptors.request.use(config => {
-    console.log(config)
     config.headers['Authorization'] = 'Bearer 123';
     // get请求映射params参数
     if (config.method === 'get' && config.params) {

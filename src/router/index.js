@@ -35,6 +35,11 @@ const routes = [
                         name: 'cesium',
                         component: () => import('@/views/components/Cesium')
                     },
+                    {
+                        path: '/three',
+                        name: 'three',
+                        component: () => import('@/views/components/Three')
+                    },
                 ]
             }
         ]

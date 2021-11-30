@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main" :style="{'width':width,'left':width=='calc(100% - 64px)'?'64px':'12%'}" style="transition: width,left 0.5s">
     <transition :name="transition">
       <router-view/>
     </transition>
@@ -11,6 +11,15 @@ export default {
   data(){
     return{
       transition:''
+    }
+  },
+  props:{
+    width:{
+      type: String,
+      default: function () {
+        return [];
+      },
+      required: false
     }
   },
   //使用watch 监听$router的变化

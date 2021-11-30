@@ -4,9 +4,9 @@
     <div class="title">
       <img class="logo" src="@/assets/logo.png" width="25px"/>
       <span class="company">测试系统</span>
+      <!-- 缩放按钮     -->
+      <i @click="change" :class="!isCollapse?'el-icon-s-fold':'el-icon-s-unfold'"></i>
     </div>
-    <!-- 缩放按钮     -->
-
     <!-- 头部右侧下拉菜单 -->
     <el-dropdown @command="handleCommand">
       <span class="el-dropdown-link">admin
@@ -21,10 +21,20 @@
 </template>
 
 <script>
+import bus from '../eventBus'
 export default {
+  data(){
+    return{
+      isCollapse:false
+    }
+  },
   methods: {
     handleCommand(command) {
       this.$message('click on item ' + command);
+    },
+    change(){
+      this.isCollapse=!this.isCollapse
+      bus.$emit('isCollapse',this.isCollapse)
     }
   }
 }
@@ -32,24 +42,29 @@ export default {
 
 <style scoped lang="scss">
 .header {
+  display: flex;
+  justify-content: space-between;
   /*左侧标题*/
   .title {
-    float: left;
-
+    width:200px;
     .logo {
       vertical-align: middle;
       padding: 0 10px 0 40px;
     }
-
     .company {
-      position: absolute;
       color: white;
+    }
+    i{
+      vertical-align: middle;
+      font-size: 32px;
+      margin-left: 10px;
+      cursor: pointer;
+      color: azure;
     }
   }
 
   /* 下拉菜单 */
   .el-dropdown {
-    float: right;
     margin-right: 40px;
   }
 

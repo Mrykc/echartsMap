@@ -54,9 +54,7 @@ service.rest.interceptors.request.use(config => {
         config.params = {};
         config.url = url;
     }
-    if(!config.l){
-        loading.open()
-    }
+    loading.open()
     return config
 }, error => {
     Promise.reject(error)

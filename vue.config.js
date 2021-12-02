@@ -60,15 +60,7 @@ module.exports = {
                 headers: {
                     Referer: 'https://geo.datav.aliyun.com/areas_v3/bound/'
                 }
-            },
-            // "/LocalDemoApi": {
-            //     target: "http://localhost:8866", // 路径指向本地主机地址及端口号
-            //     ws: true,
-            //     changeOrigin: true,
-            //     pathRewrite: {
-            //         "^/LocalDemoApi": "/DemoData" // 路径转发代理
-            //     }
-            // },
+            }
         }
     }
 };

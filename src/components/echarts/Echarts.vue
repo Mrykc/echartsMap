@@ -83,7 +83,6 @@ export default {
             this.isHaveNext=true
             this.$emit("contextmenu", params);
           });
-         // window.addEventListener("resize", this.resizeChart)
         });
       });
     },

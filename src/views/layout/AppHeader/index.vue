@@ -5,7 +5,7 @@
       <img class="logo" src="@/assets/logo.png" width="25px"/>
       <span class="company">测试系统</span>
       <!-- 缩放按钮     -->
-      <i @click="change" :class="!isCollapse?'el-icon-s-fold':'el-icon-s-unfold'"></i>
+      <i @click="change" :class="!nav?'el-icon-s-fold':'el-icon-s-unfold'"></i>
     </div>
     <!-- 头部右侧下拉菜单 -->
     <el-dropdown @command="handleCommand">
@@ -21,20 +21,32 @@
 </template>
 
 <script>
-import bus from '../eventBus'
+import {mapState} from 'vuex'
 export default {
-  data(){
-    return{
-      isCollapse:false
+  data() {
+    return {
+      isCollapse: false
+    }
+  },
+  computed:{
+    //第一个参数为使用命名空间(namespace)的vuex model,第二个参数为state
+    ...mapState('homes',{
+      nav:'nav',
+      theme:'theme'
+    })
+  },
+  watch: {
+    nav:{
+      handler(old, val) {
+      }
     }
   },
   methods: {
     handleCommand(command) {
       this.$message('click on item ' + command);
     },
-    change(){
-      this.isCollapse=!this.isCollapse
-      bus.$emit('isCollapse',this.isCollapse)
+    change() {
+      this.$store.dispatch("homes/CHANGE_NAV")
     }
   }
 }
@@ -46,15 +58,18 @@ export default {
   justify-content: space-between;
   /*左侧标题*/
   .title {
-    width:200px;
+    width: 200px;
+
     .logo {
       vertical-align: middle;
       padding: 0 10px 0 40px;
     }
+
     .company {
       color: white;
     }
-    i{
+
+    i {
       vertical-align: middle;
       font-size: 32px;
       margin-left: 10px;

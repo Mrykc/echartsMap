@@ -7,7 +7,7 @@
         background-color="#545c64"
         text-color="#ffffff"
         router
-        :collapse="isCollapse"
+        :collapse="nav"
         @open="handleOpen"
         @close="handleClose">
 <!--      动态生成菜单栏组件-->
@@ -17,8 +17,8 @@
 </template>
 <script>
 import routes from './router'
-import bus from '../eventBus'
 import zMenu from './zMenu'
+import {mapState} from "vuex";
 export default {
   components:{zMenu},
   props:{
@@ -30,9 +30,14 @@ export default {
       required: false
     }
   },
+  computed:{
+    ...mapState('homes',{
+      nav:'nav',
+      theme:'theme'
+    })
+  },
   data() {
     return {
-      isCollapse: false,
       routes: routes,
       defaultActive: '/home',
     };
@@ -44,16 +49,7 @@ export default {
     }
   },
   mounted() {
-    //监听缩放
-    bus.$on('isCollapse', data => {
-      this.isCollapse = data
-      if(!this.isCollapse){
-        this.$emit('change','12%','88%')
-      }else{
-        this.$emit('change','64px','calc(100% - 64px)')
-      }
-      this.$el.getElementsByClassName('el-submenu__icon-arrow')[0].style.dispaly='none'
-    })
+
   },
   methods: {
     handleOpen(key, keyPath) {

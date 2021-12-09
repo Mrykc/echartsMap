@@ -1,7 +1,7 @@
 <template>
   <div style="overflow: hidden">
     <Header></Header>
-    <NavBar :width="navWidth" @change="change"></NavBar>
+    <NavBar :width="navWidth"></NavBar>
     <Main :width="mainWidth"></Main>
   </div>
 </template>
@@ -10,21 +10,50 @@
 import Header from '@/views/layout/AppHeader'
 import NavBar from '@/views/layout/AppNavBar'
 import Main from '@/views/layout/AppMain'
+import {mapState} from "vuex";
+
 export default {
-  components:{Header,NavBar,Main},
-  data(){
-    return{
-      navWidth:'12%',
-      mainWidth:'88%'
+  components: {Header, NavBar, Main},
+  data() {
+    return {
+      navWidth: '12%',
+      mainWidth: '88%'
     }
   },
-  methods:{
-    //更改main和nav宽度
-    change(navWidth,mainWidth){
-      this.navWidth=navWidth
-      this.mainWidth=mainWidth
+  computed: {
+    ...mapState('homes', {
+      nav: 'nav',
+      theme: 'theme'
+    })
+  },
+  watch: {
+    //监听缩放
+    //第一种写法
+    // nav() {
+    //   if (!this.nav) {
+    //     this.navWidth = '12%'
+    //     this.mainWidth = '88%'
+    //     this.$emit('change', '12%', '88%')
+    //   } else {
+    //     this.navWidth = '64px'
+    //     this.mainWidth = 'calc(100% - 64px)'
+    //   }
+    // },
+    //第二种写法
+    nav: {
+      handler() {
+        if (!this.nav) {
+          this.navWidth = '12%'
+          this.mainWidth = '88%'
+        } else {
+          this.navWidth = '64px'
+          this.mainWidth = 'calc(100% - 64px)'
+        }
+      }
     }
   }
+  ,
+  methods: {}
 }
 </script>
 
@@ -49,7 +78,8 @@ export default {
   overflow-y: auto;
   background-color: #545c64;
   overflow-x: hidden;
-  &-conceal{
+
+  &-conceal {
     width: 5%;
   }
 }
@@ -63,7 +93,8 @@ export default {
   bottom: 0px;
   overflow-y: auto;
   background-color: #ffffff;
-  &-conceal{
+
+  &-conceal {
     left: 5%;
   }
 }
